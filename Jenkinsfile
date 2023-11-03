@@ -4,7 +4,6 @@ pipeline {
         terraform 'Terraform-1.4.2'
     }
     stages {
-        
         stage('Run CI?') {
           steps {
             script {
@@ -16,13 +15,11 @@ pipeline {
             }
           }
         } 
-        
         stage('---Test---') {
             steps {
                 sh 'grep -i "master" index.html'
             }
         }
-        
         stage('---Infrastructure Provisioning---') { 
             environment {
                 AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
@@ -30,41 +27,37 @@ pipeline {
             }
             steps {
                 sh '''terraform init
-                	  terraform apply -auto-approve
-                	  chmod 600 private.pem'''
+                    terraform apply -auto-approve
+                    chmod 600 private.pem'''
                 script {
                     def IP = sh(script: "terraform output public_ip", returnStdout: true).trim()
                     env.PUBLIC_IP = IP.replaceAll('"','')
                 }
-
                 // sh 'terraform destroy -auto-approve' 
             }
         }        
-
         stage('---Installation---') {
             steps {
                 sh '''ssh -i private.pem -o StrictHostKeyChecking=accept-new -T ubuntu@$PUBLIC_IP <<EOF
                     whoami
                     sudo apt update
                     sudo snap install docker
-                	exit
-                	EOF'''
+                    exit
+                    EOF'''
             }
         }  
-
         stage('---Configuration---') {
             steps {
                 sh '''ssh -i private.pem -o StrictHostKeyChecking=accept-new -T ubuntu@$PUBLIC_IP <<EOF
                     sudo groupadd docker
-                	sudo usermod -aG docker ubuntu
-                	newgrp docker
-                	sudo chown root:docker /var/run/docker.sock
-                	exit
+                    sudo usermod -aG docker ubuntu
+                    newgrp docker
+                    sudo chown root:docker /var/run/docker.sock
+                    exit
                     exit
                 	EOF'''
             }
         }
-
         stage('---Deployment---') {
             steps {
                 sh '''ssh -i private.pem -o StrictHostKeyChecking=accept-new -T ubuntu@$PUBLIC_IP <<EOF
@@ -89,6 +82,5 @@ pipeline {
                     EOF'''
             }
         }    
-             
     }
 }
