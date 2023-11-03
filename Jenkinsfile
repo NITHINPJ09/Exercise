@@ -29,19 +29,18 @@ pipeline {
                 AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
             }
             steps {
-                sh '''terraform init
+ /*               sh '''terraform init
                 	  terraform apply -auto-approve
                 	  chmod 600 private.pem'''
                 script {
                     def IP = sh(script: "terraform output public_ip", returnStdout: true).trim()
                     env.PUBLIC_IP = IP.replaceAll('"','')
                 }
-                /*
+*/
                 sh 'terraform destroy -auto-approve'
-                */
             }
         }        
-
+/*
         stage('---Installation---') {
             steps {
                 sh '''ssh -i private.pem -o StrictHostKeyChecking=accept-new -T ubuntu@$PUBLIC_IP <<EOF
@@ -90,6 +89,6 @@ pipeline {
                     EOF'''
             }
         }    
-             
+*/             
     }
 }
