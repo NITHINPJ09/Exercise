@@ -20,6 +20,16 @@ pipeline {
                 sh 'grep -i "master" index.html'
             }
         }
+        stage('---Destroy Infrastructure---') { 
+            environment {
+                AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+                AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+            }
+            steps {
+                sh 'terraform destroy -auto-approve' 
+            }
+        }
+        /*
         stage('---Infrastructure Provisioning---') { 
             environment {
                 AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
@@ -33,7 +43,6 @@ pipeline {
                     def IP = sh(script: "terraform output public_ip", returnStdout: true).trim()
                     env.PUBLIC_IP = IP.replaceAll('"','')
                 }
-                // sh 'terraform destroy -auto-approve' 
             }
         }        
         stage('---Installation---') {
@@ -81,6 +90,7 @@ pipeline {
                     exit
                     EOF'''
             }
-        }    
+        } 
+        */
     }
 }
