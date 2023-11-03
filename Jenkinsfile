@@ -64,7 +64,7 @@ pipeline {
                     sudo chown root:docker /var/run/docker.sock
                     exit
                     exit
-                	EOF'''
+                    EOF'''
             }
         }
         stage('---Deployment---') {
