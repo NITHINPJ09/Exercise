@@ -29,8 +29,6 @@ pipeline {
                 AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
             }
             steps {
-
-                /*
                 sh '''terraform init
                 	  terraform apply -auto-approve
                 	  chmod 600 private.pem'''
@@ -38,26 +36,33 @@ pipeline {
                     def IP = sh(script: "terraform output public_ip", returnStdout: true).trim()
                     env.PUBLIC_IP = IP.replaceAll('"','')
                 }
-                */
+                /*
                 sh 'terraform destroy -auto-approve'
+                */
             }
         }        
 
-        /*
         stage('---Installation---') {
             steps {
                 sh '''ssh -i private.pem -o StrictHostKeyChecking=accept-new -T ubuntu@$PUBLIC_IP <<EOF
                     whoami
                     sudo snap install docker
+                	exit
+                	EOF'''
+            }
+        }  
+
+        stage('---Configuration---') {
+            steps {
+                sh '''ssh -i private.pem -o StrictHostKeyChecking=accept-new -T ubuntu@$PUBLIC_IP <<EOF
                     sudo groupadd docker
                 	sudo usermod -aG docker ubuntu
                 	newgrp docker
                 	sudo chown root:docker /var/run/docker.sock
                 	exit
-                	exit
                 	EOF'''
             }
-        }  
+        }
 
         stage('---Deployment---') {
             steps {
@@ -83,7 +88,6 @@ pipeline {
                     EOF'''
             }
         }    
-        */
              
     }
 }
