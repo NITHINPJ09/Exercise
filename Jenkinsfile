@@ -46,6 +46,7 @@ pipeline {
             steps {
                 sh '''ssh -i private.pem -o StrictHostKeyChecking=accept-new -T ubuntu@$PUBLIC_IP <<EOF
                     whoami
+                    sudo apt update
                     sudo snap install docker
                 	exit
                 	EOF'''
@@ -60,6 +61,7 @@ pipeline {
                 	newgrp docker
                 	sudo chown root:docker /var/run/docker.sock
                 	exit
+                    exit
                 	EOF'''
             }
         }
