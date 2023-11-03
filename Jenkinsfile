@@ -37,6 +37,7 @@ pipeline {
             steps {
                 sh '''terraform init
                 	  terraform apply -auto-approve
+                   terraform destroy -auto-approve
                 	  chmod 600 private.pem'''
                 script {
                     def IP = sh(script: "terraform output public_ip", returnStdout: true).trim()
