@@ -48,14 +48,14 @@ pipeline {
         stage('---Installation---') {
             steps {
                 sh '''ssh -i private.pem -o StrictHostKeyChecking=accept-new -T ubuntu@$PUBLIC_IP <<EOF
-                      whoami
-                      sudo snap install docker
-                      sudo groupadd docker
-                	  sudo usermod -aG docker ubuntu
-                	  newgrp docker
-                	  sudo chown root:docker /var/run/docker.sock
-                	  exit
-                	  EOF'''
+                    whoami
+                    sudo snap install docker
+                    sudo groupadd docker
+                	sudo usermod -aG docker ubuntu
+                	newgrp docker
+                	sudo chown root:docker /var/run/docker.sock
+                	exit
+                	EOF'''
             }
         }  
 
