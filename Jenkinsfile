@@ -17,12 +17,6 @@ pipeline {
           }
         } 
         
-        stage('---Checkout---') {
-            steps {
-                git branch: 'master', url: 'https://github.com/NITHINPJ09/Exercise.git'
-            }
-        } 
-                     
         stage('---Test---') {
             steps {
                 sh 'grep -i "master" index.html'
