@@ -77,7 +77,7 @@ pipeline {
                         docker stop myApp
                         docker rm myApp                      
                     fi
-                    docker pull --no-cache nithinpj09/website:1.0
+                    docker rmi nithinpj09/website:1.0
                     docker run -d --restart always -p 80:80 --name myApp nithinpj09/website:1.0
                     exit
                     EOF'''
