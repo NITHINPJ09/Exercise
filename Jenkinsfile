@@ -20,16 +20,6 @@ pipeline {
                 sh 'grep -i "master" index.html'
             }
         }
-        stage('---Destroy Infrastructure---') { 
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
-                AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-            }
-            steps {
-                sh 'terraform destroy -auto-approve' 
-            }
-        }
-        /*
         stage('---Infrastructure Provisioning---') { 
             environment {
                 AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
@@ -86,11 +76,9 @@ pipeline {
                     docker rmi website
                     docker build -t website .
                     docker run -d --restart always -p 80:80 --name myApp website
-                    docker exec myApp chmod -R 777 /usr/share/nginx/html/
                     exit
                     EOF'''
             }
         } 
-        */
     }
 }
