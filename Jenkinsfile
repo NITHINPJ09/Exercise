@@ -51,7 +51,6 @@ pipeline {
                     sudo groupadd docker
                     sudo usermod -aG docker ubuntu
                     newgrp docker
-                    sudo chown root:docker /var/run/docker.sock
                     exit
                     exit
                     EOF'''
