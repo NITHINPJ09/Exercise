@@ -72,7 +72,7 @@ pipeline {
                     cd demo
                     if docker ps | grep -q 'myApp'
                     then 
-                        echo "Stopping and removing the myApp."
+                        echo "Stopping and removing the container."
                         docker stop myApp
                         docker rm myApp 
                         docker rmi website                        
