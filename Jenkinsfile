@@ -17,7 +17,7 @@ pipeline {
         } 
         stage('---Test---') {
             steps {
-                sh 'grep -i "master" index.html'
+                sh 'grep -i "Hello" index.html'
             }
         }
         stage('---Infrastructure Provisioning---') { 
