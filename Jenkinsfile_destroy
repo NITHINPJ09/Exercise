@@ -1,0 +1,33 @@
+pipeline {
+    agent any 
+    tools {
+        terraform 'Terraform-1.4.2'
+    }
+    stages {
+        stage('Run CI?') {
+          steps {
+            script {
+              sh 'git log -1'
+              if (sh(script: "git log -1 | grep '.*\\[ci skip\\].*'", returnStatus: true) == 0) {
+                currentBuild.result = 'NOT_BUILT'
+                error "'[ci skip]' found in git commit message. Aborting..."
+              }
+            }
+          }
+        } 
+        stage('---Test---') {
+            steps {
+                sh 'grep -i "master" index.html'
+            }
+        }
+        stage('---Destroy Infrastructure---') { 
+            environment {
+                AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+                AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+            }
+            steps {
+                sh 'terraform destroy -auto-approve' 
+            }
+        }
+    }
+}
