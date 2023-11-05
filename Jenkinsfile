@@ -71,9 +71,13 @@ pipeline {
                 sh '''scp -i private.pem  -o StrictHostKeyChecking=accept-new -r ./index.html ./css ./Dockerfile ubuntu@$PUBLIC_IP:/home/ubuntu/demo'''
                 sh '''ssh -i private.pem -o StrictHostKeyChecking=accept-new -T ubuntu@$PUBLIC_IP <<EOF
                     cd demo
-                    docker stop myApp
-                    docker rm myApp
-                    docker rmi website
+                    if docker ps | grep -q 'myApp'
+                    then 
+                        echo "Stopping and removing the myApp."
+                        docker stop myApp
+                        docker rm myApp 
+                        docker rmi website                        
+                    fi
                     docker build -t website .
                     docker run -d --restart always -p 80:80 --name myApp website
                     exit
