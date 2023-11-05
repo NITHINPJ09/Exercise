@@ -15,11 +15,6 @@ pipeline {
             }
           }
         } 
-        stage('---Test---') {
-            steps {
-                sh 'grep -i "master" index.html'
-            }
-        }
         stage('---Destroy Infrastructure---') { 
             environment {
                 AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
