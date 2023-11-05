@@ -37,6 +37,7 @@ pipeline {
         }        
         stage('---Installation---') {
             steps {
+                sleep time: 5, unit: 'SECONDS'
                 sh '''ssh -i private.pem -o StrictHostKeyChecking=accept-new -T ubuntu@$PUBLIC_IP <<EOF
                     whoami
                     sudo apt update
